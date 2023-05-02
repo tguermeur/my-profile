@@ -1,0 +1,253 @@
+<code>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV interactif</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0047AB;
+        }
+
+        header {
+            background-color: #0047AB;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 36px;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        section p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        section a {
+            display: inline-block;
+            font-size: 18px;
+            color: white;
+            background-color: #0047AB;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .contact {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .contact-flex {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 10px;
+        }
+
+        .contact-flex i {
+            font-size: 24px;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .contact-flex span {
+            font-size: 18px;
+        }
+
+        .experience,
+        .education,
+        .skills,
+        .interests {
+            margin-top: 20px;
+        }
+
+        .experience ul,
+        .education ul,
+        .skills ul,
+        .interests ul {
+            list-style-type: none;
+        }
+
+        .experience li,
+        .education li,
+        .skills li,
+        .interests li {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            
+           .profile {
+               flex-direction: column; 
+           } 
+
+           .profile img {
+               margin-right: 0; 
+               margin-bottom :20px; 
+           } 
+
+           .contact-flex {
+               width :50%; 
+           } 
+           
+           section a {
+               width :100%; 
+               text-align :center; 
+           }
+
+
+<code>
+        /* Ajout de couleurs et de bordures */
+
+        header {
+            border-bottom: 5px solid #ff9900;
+        }
+
+        section h2 {
+            color: #ff9900;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        section a {
+            background-color: #ff9900;
+        }
+
+        .contact-flex i {
+            color: #ff9900;
+        }
+
+        /* Ajout d'effets de transition */
+
+        section a:hover {
+            transform: scale(1.1);
+            transition: 0.3s;
+        }
+
+        .contact-flex i:hover {
+            transform: rotate(360deg);
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CV interactif Téo Guermeur</h1>
+    </header>
+    <section class="profile">
+        <img src="teophoto.jpg" alt="Photo de profil">
+        <div class="content">
+            <h2>Téo Guermeur</h2>
+            <p>Je suis un étudiant à Audencia Business School en programme Grande École.</p>
+            <a href="cvteoguer.pdf" download>Télécharger mon CV</a>
+        </div>
+    </section>
+    <section class="contact">
+        <div class="contact-flex">
+            <i class="fas fa-phone"></i>
+            <span>07 88 32 58 87</span>
+        </div>
+        <div class="contact-flex">
+            <i class="fas fa-envelope"></i>
+            <span>teo.guermeur@gmail.com</span>
+        </div>
+        <div class="contact-flex">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Nantes, France</span>
+        </div>
+        <div class="contact-flex">
+            <i class="fab fa-linkedin"></i>
+            <span>linkedin.com/in/teo-guermeur</span>
+        </div>
+
+    </section>
+    <section class="experience">
+        <h2>Parcours scolaire</h2>
+        <ul>
+            <li>Audencia Business School Programme Grande Ecole (2022-2026)</li>
+            <li> La Pérouse- Kerichen Classe préparatoire HEC (2020 - 2022)</li>
+            <li>HEC Paris Prep'Etoile (2020 - 2021)</li>
+            <li>Lycée naval de Brest Études secondaires dans l'un des cinq lycées militaires français (2017-2020)</li>
+        </ul>
+    </section>
+        </section>
+    <section class="experience">
+        <h2>Expériences professionnelles</h2>
+        <ul>
+            <li> <strong> Europcar (2022) </strong> </li>
+             <li>Responsable préparation</li>
+            <li><strong> ASO Organisation (2021) </strong></li>
+            <li>Tour de France Assistant au service accréditation et sponsors lors du Tour de France 2021</li>
+        </ul>
+    </section>
+
+<section class=“experience”> <h2>Mes expériences associatives</h2> <ul> <li><strong>2022-2023</strong></li> <li>Président Jobencia Service</li> <li>Président de la Job Service d’Audencia Création de l’association</li> <li><strong>2023</strong></li> <li>Bureau des sports</li> <li>Membre du bureau des sports d’Audencia</li> <li>Organisation d’une soirée pour promouvoir l’association</li> <li>Coach Handball 2023</li> <li><strong>2006-2023</strong></li> <li>Handball</li> <li>Membre de l’équipe de handball d’Audencia</li> <li>Capitaine de l’équipe de handball du Lycée Naval</li> <li><strong>2014-2023</strong></li> <li>Echecs</li> <li>Membre de l’équipe d’échecs d’Audencia</li> <li>Vice-champion départemental catégorie jeune</li> </ul> </section>
+ 
+
+<code>
+        </ul>
+    <section class="interests">
+        <h2>Centres d'intérêt</h2>
+        <ul>
+            <li>Technologie</li>
+            <li>Voyage</li>
+            <li>Cinéma</li>
+            <li>Sport</li>
+        </ul>
+    </section>
+</body>
+</html>
+
+</h5>
+      </div>
+    </section>
+    <section class="u-align-center u-clearfix u-container-align-center-lg u-container-align-center-md u-container-align-center-sm u-container-align-center-xl u-custom-color-1 u-section-3" id="carousel_819d">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-image u-image-circle u-image-1" data-image-width="1170" data-image-height="1560"></div>
+        <div class="u-social-icons u-spacing-43 u-social-icons-1">
+          <a class="u-social-url" title="facebook" target="_blank" href="https://www.linkedin.com/in/teo-guermeur/"><span class="u-file-icon u-icon u-social-facebook u-social-icon u-icon-1"><img src="images/3536505.png" alt=""></span>
+          </a>
+          <a class="u-social-url" title="Gmail" target="_blank" href="mailto:teo.guermeur@gmail.com"><span class="u-file-icon u-icon u-social-icon u-social-instagram u-icon-2"><img src="images/552486.png" alt=""></span>
+          </a>
+          <a class="u-social-url" target="_blank" data-type="YouTube" title="Téléphone" href="tel:+33788325887"><span class="u-file-icon u-icon u-social-icon u-social-youtube u-icon-3"><img src="images/455705.png" alt=""></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
