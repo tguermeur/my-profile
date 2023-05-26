@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Présentation du handball</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: navy;
+    }
+    
+    p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    h2 {
+      color: navy;
+      margin-bottom: 10px;
+    }
+    
+    button {
+      background-color: navy;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #000080;
+    }
+    
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    #content-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    #scrollable-content {
+      max-height: 300px;
+      overflow-y: scroll;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    
+    #footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    #footer a {
+      color: navy;
+      text-decoration: none;
+    }
+    
+    #footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .player-section {
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .player-name {
+      color: navy;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .player-info {
+      color: #666;
+    }
+    
+    #logo {
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    #logo img {
+      width: 150px;
+    }
+  </style>
+  <script>
+    function toggleContent(id) {
+      var element = document.getElementById(id);
+      element.classList.toggle('hidden');
+    }
+  </script>
+</head>
+<body>
+  <div id="content-wrapper">
+    <h1>Le handball</h1>
+    <p>Le handball est un sport dynamique et passionnant qui met en jeu l'adresse, la vitesse et la stratégie. Il se joue avec deux équipes de sept joueurs, dont un gardien de but, qui s'affrontent pour marquer des buts en lançant un ballon dans le but adverse. Le handball se distingue par son rythme rapide et ses mouvements acrobatiques, où les joueurs doivent faire preuve de dextérité pour dribbler, passer et tirer. Ce sport collectif exige une coordination exceptionnelle entre les coéquipiers, ainsi qu'une compréhension tactique pour anticiper les actions de l'adversaire. Que ce soit en salle ou sur un terrain extérieur, le handball offre des moments palpitants et des rencontres spectaculaires qui captivent les fans du monde entier.</p>
+    
+    <h2>Les règles du handball</h2>
+    <button onclick="toggleContent('rules-content')">Afficher les règles</button>
+    <div id="rules-content" class="hidden">
+      <ul>
+        <li>Deux équipes de sept joueurs s'affrontent.</li>
+        <li>L'objectif est de marquer des buts en lançant le ballon dans le but adverse.</li>
+        <li>Les joueurs peuvent dribbler, passer et tirer le ballon pour progresser vers le but adverse.</li>
+        <li>Le gardien de but protège le but de son équipe.</li>
+        <li>Le jeu est rythmé et les équipes doivent se passer le ballon en moins de trois secondes.</li>
+        <li>Les contacts physiques excessifs sont interdits.</li>
+        <li>Le jeu est divisé en deux mi-temps de 30 minutes chacune.</li>
+      </ul>
+    </div>
+    
+    <h2>Les compétitions majeures</h2>
+    <button onclick="toggleContent('competitions-content')">Afficher les compétitions</button>
+    <div id="competitions-content" class="hidden">
+      <ul>
+        <li>Championnat du monde de handball</li>
+        <li>Championnat d'Europe de handball</li>
+        <li>Ligue des champions de l'EHF</li>
+        <li>Coupe du monde de handball</li>
+        <li>Jeux olympiques</li>
+      </ul>
+    </div>
+    
+    <h2>Les joueurs emblématiques</h2>
+    <div class="player-section">
+      <h3 class="player-name">Nikola Karabatic</h3>
+      <p class="player-info">Nikola Karabatic est un joueur de handball français considéré comme l'un des meilleurs joueurs de tous les temps. Il a remporté de nombreux titres avec l'équipe nationale de France et avec son club, le Paris Saint-Germain Handball. Karabatic est réputé pour sa polyvalence, son adresse et sa vision de jeu exceptionnelle. Il a été élu plusieurs fois meilleur joueur du monde et a été un élément clé des succès de l'équipe de France lors de leurs victoires en championnats du monde et en championnats d'Europe.</p>
+    </div>
+    
+    <div class="player-section">
+      <h3 class="player-name">Mikkel Hansen</h3>
+      <p class="player-info">Mikkel Hansen est un joueur de handball danois considéré comme l'un des meilleurs arrières gauches de tous les temps. Il a connu une carrière exceptionnelle avec l'équipe nationale du Danemark et avec le Paris Saint-Germain Handball. Hansen est connu pour sa puissance de tir, son jeu élégant et son leadership sur le terrain. Il a remporté de nombreux titres, dont plusieurs championnats d'Europe, et a été couronné meilleur joueur du monde à plusieurs reprises.</p>
+    </div>
+    
+    <div class="player-section">
+      <h3 class="player-name">Filip Jicha</h3>
+      <p class="player-info">Filip Jicha est un ancien joueur de handball tchèque qui a marqué l'histoire du sport. Il a joué pour le club allemand THW Kiel et a remporté de nombreux titres, dont plusieurs Ligues des champions de l'EHF. Jicha était un arrière complet avec une grande puissance de tir et une excellente vision de jeu. Il a été élu meilleur joueur du monde en 2010 et a contribué de manière significative aux succès de l'équipe nationale tchèque.</p>
+    </div>
+    
+    <h2>Images de handball</h2>
+    <button onclick="toggleContent('images-content')">Afficher les images</button>
+    <div id="images-content" class="hidden">
+      <div id="scrollable-content">
+        <img src="handball1.jpg" alt="Image de handball 1" width="200">
+        <img src="handball2.jpg" alt="Image de handball 2" width="200">
+        <img src="handball3.jpg" alt="Image de handball 3" width="200">
+      </div>
+    </div>
+    
+    <div id="footer">
+      <p>Plus d'informations sur le handball sur le site de la <a href="https://www.federation-handball.fr/">Fédération Française de Handball</a>.</p>
+      <div id="logo">
+        <img src="logo.jpg" alt="Logo de la Fédération de Handball">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
