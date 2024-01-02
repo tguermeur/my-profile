@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tableau Dynamique avec Fenêtre Modale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border-radius: 5px;
+            width: 50%; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #519ce1;
+    color: white;
+    white-space: nowrap;
+    padding: 12px 15px;
+    text-align: center; /* Ajout de cette ligne pour centrer le texte */
+    border-bottom: 1px solid #ddd;
+        }
+        
+        button {
+    /* autres styles existants */
+    margin-bottom: 10px; /* Ajustez cette valeur selon vos besoins */
+}
+
+
+        th button {
+            background-color: #519ce1;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        th button:hover {
+            background-color: #519ce1;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        button {
+            background-color: #519ce1;
+            color: white;
+            padding: 7px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        button:hover {
+            background-color: #519ce1;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="document.getElementById('maModal').style.display='block'">Ajouter une Ligne</button>
+
+    <div id="maModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('maModal').style.display='none'">&times;</span>
+        <h2>Ajouter des informations</h2>
+        <input type="text" id="numeroMission" placeholder="Numéro de mission"><br><br>
+        <input type="text" id="cdm" placeholder="CDM"><br><br>
+        <input type="text" id="entreprise" placeholder="Entreprise"><br><br>
+        <input type="text" id="lieu" placeholder="Lieu"><br><br>
+        <input type="date" id="date"><br><br>
+        <button onclick="ajouterAuTableau()">Ajouter au Tableau</button>
+      </div>
+    </div>
+
+    <div id="modalModification" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('modalModification').style.display='none'">&times;</span>
+            <h2>Modifier la mission</h2>
+            <input type="text" id="numeroMissionMod" placeholder="Numéro de mission"><br><br>
+            <input type="text" id="cdmMod" placeholder="CDM"><br><br>
+            <input type="text" id="entrepriseMod" placeholder="Entreprise"><br><br>
+            <input type="text" id="lieuMod" placeholder="Lieu"><br><br>
+            <input type="date" id="dateMod"><br><br>
+            <button onclick="modifierMission()">Sauvegarder les modifications</button>
+        </div>
+    </div>
+
+    <div id="modalTri" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('modalTri').style.display='none'">&times;</span>
+            <h2>Trier la colonne</h2>
+            <p>Choisissez l'ordre de tri :</p>
+            <button onclick="trierTableau('asc')">Croissant</button>
+            <button onclick="trierTableau('desc')">Décroissant</button>
+        </div>
+    </div>
+
+    <div id="modalDetails" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('modalDetails').style.display='none'">&times;</span>
+            <h2>Détails de la Mission</h2>
+            <p id="detailsNumeroMission"></p>
+            <p id="detailsCdm"></p>
+            <p id="detailsLieu"></p>
+            <p id="detailsDate"></p>
+            
+            <h3>Étudiants</h3>
+            <button onclick="ajouterEtudiant()">Ajouter un Étudiant</button>
+            <table id="tableauEtudiants">
+                <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Heures Travaillées</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les lignes d'étudiants seront ajoutées ici dans <tbody> -->
+                </tbody>
+            </table>
+            <!-- Ici, le total des heures travaillées sera affiché -->
+            <p id="totalHeures">Total des heures travaillées : 0</p>
+            <div>
+                <label for="coutHoraireHT">Coût horaire HT :</label>
+                <input type="number" id="coutHoraireHT" placeholder="Entrez le coût horaire HT" onchange="calculerCoutTotal()">
+            </div>
+            
+            <!-- Nouveau champ de saisie pour les Frais TTC -->
+            <div>
+                <label for="fraisTTC">Frais TTC :</label>
+                <input type="number" id="fraisTTC" placeholder="Entrez les frais TTC" onchange="calculerCoutTotal()">
+            </div>
+            
+            <p id="coutTotal"></p>
+            <p id="coutTotalTTC"></p> <!-- Afficher le coût total TTC -->
+        </div>
+    </div>
+    
+    
+    
+
+    <table id="monTableau">
+        <tr>
+            <th>Numéro de mission <button onclick="ouvrirModalTri('numero')">Filtrer</button></th>
+            <th>CDM <button onclick="ouvrirModalTri('cdm')">Filtrer</button></th>
+            <th>Entreprise <button onclick="ouvrirModalTri('entreprise')">Filtrer</button></th>
+            <th>Lieu <button onclick="ouvrirModalTri('lieu')">Filtrer</button></th>
+            <th>Date <button onclick="ouvrirModalTri('date')">Filtrer</button></th>
+            <th>Actions</th>
+        </tr>
+        <!-- Les lignes seront ajoutées ici -->
+    </table>
+
+    <script>
+
+var colonneATrier; // Variable pour stocker la colonne à trier
+
+function ouvrirModalTri(colonne) {
+    colonneATrier = colonne;
+    document.getElementById('modalTri').style.display = 'block';
+}
+
+function trierTableau(ordre) {
+    var tableau = document.getElementById("monTableau");
+    var lignes = Array.from(tableau.rows).slice(1); // Ignorer l'en-tête
+
+    var indexColonne;
+    if (colonneATrier === 'numero') indexColonne = 0;
+    else if (colonneATrier === 'cdm') indexColonne = 1;
+    else if (colonneATrier === 'lieu') indexColonne = 2;
+    else if (colonneATrier === 'date') indexColonne = 3;
+
+    lignes.sort(function(a, b) {
+        var valA = a.cells[indexColonne].innerText;
+        var valB = b.cells[indexColonne].innerText;
+        return (ordre === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA));
+    });
+
+    lignes.forEach(function(ligne) {
+        tableau.appendChild(ligne);
+    });
+
+    document.getElementById('modalTri').style.display = 'none';
+}
+function afficherDetailsMission(rowIndex) {
+    var tableau = document.getElementById("monTableau");
+    var ligne = tableau.rows[rowIndex];
+
+    // Afficher les détails de la mission
+    document.getElementById("detailsNumeroMission").innerText = 'Numéro de Mission: ' + ligne.cells[0].innerHTML;
+    document.getElementById("detailsCdm").innerText = 'CDM: ' + ligne.cells[1].innerHTML;
+    document.getElementById("detailsLieu").innerText = 'Lieu: ' + ligne.cells[2].innerHTML;
+    document.getElementById("detailsDate").innerText = 'Date: ' + ligne.cells[3].innerHTML;
+
+    // Récupérer les données de la mission à partir de localStorage
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    var mission = missions.find(m => m.numero === ligne.cells[0].innerHTML);
+
+    // Vérifier si la mission a une liste d'étudiants et les afficher
+    if (mission && mission.etudiants) {
+        var tableauEtudiants = document.getElementById("tableauEtudiants");
+        tableauEtudiants.innerHTML = ""; // Effacer les anciennes données d'étudiants
+
+        mission.etudiants.forEach(etudiant => {
+            // Ajouter chaque étudiant au tableau
+            var nouvelleLigne = tableauEtudiants.insertRow(-1);
+            nouvelleLigne.insertCell(0).innerHTML = etudiant.prenom;
+            nouvelleLigne.insertCell(1).innerHTML = etudiant.nom;
+            nouvelleLigne.insertCell(2).innerHTML = etudiant.heures;
+        });
+    }
+
+    // Ouvrir la fenêtre modale de détail de la mission
+    document.getElementById('modalDetails').style.display = 'block';
+
+    // Enregistrer rowIndex dans un attribut pour l'utiliser dans les fonctions de modification et de suppression
+    document.getElementById('modalDetails').setAttribute('data-row-index', rowIndex);
+
+    var numeroMission = document.getElementById("monTableau").rows[rowIndex].cells[0].innerText;
+    chargerEtudiants(numeroMission);
+    document.getElementById('modalDetails').style.display = 'block';
+    document.getElementById('modalDetails').setAttribute('data-numero-mission', numeroMission);
+}
+
+
+
+function ajouterAuTableau() {
+    var mission = {
+        numero: document.getElementById("numeroMission").value,
+        cdm: document.getElementById("cdm").value,
+        entreprise: document.getElementById("entreprise").value, // Entreprise
+        lieu: document.getElementById("lieu").value,
+        date: document.getElementById("date").value
+    };
+
+    if (!mission.numero || !mission.cdm || !mission.entreprise || !mission.lieu || !mission.date) {
+        alert("Veuillez remplir tous les champs avant d'ajouter une mission.");
+        return;
+    }
+
+    ajouterMissionAuTableau(mission);
+    sauvegarderMission(mission);
+
+    document.getElementById('maModal').style.display = 'none';
+    document.getElementById("numeroMission").value = "";
+    document.getElementById("cdm").value = "";
+    document.getElementById("entreprise").value = ""; // Réinitialiser le champ Entreprise
+    document.getElementById("lieu").value = "";
+    document.getElementById("date").value = "";
+}
+
+
+        function ajouterMissionAuTableau(mission, isNew = true) {
+    var tableau = document.getElementById("monTableau");
+    var nouvelleLigne = isNew ? tableau.insertRow(-1) : mission.row;
+
+    var cell1 = nouvelleLigne.insertCell(0); // Cellule pour Numéro de mission
+    var cell2 = nouvelleLigne.insertCell(1); // Cellule pour CDM
+    var cell3 = nouvelleLigne.insertCell(2); // Cellule pour Entreprise
+    var cell4 = nouvelleLigne.insertCell(3); // Cellule pour Lieu
+    var cell5 = nouvelleLigne.insertCell(4); // Cellule pour Date
+    var cell6 = nouvelleLigne.insertCell(5); // Cellule pour Actions
+
+    cell1.innerHTML = mission.numero;
+    cell1.style.cursor = 'pointer';
+    cell1.onclick = function() { afficherDetailsMission(nouvelleLigne.rowIndex); };
+    cell2.innerHTML = mission.cdm;
+
+    // Vérifiez si l'attribut 'entreprise' de l'objet mission est défini
+    cell3.innerHTML = mission.entreprise ? mission.entreprise : "";
+
+    cell4.innerHTML = mission.lieu;
+    cell5.innerHTML = mission.date;
+
+    // Boutons Modifier et Supprimer
+    var btnModifier = document.createElement("button");
+    btnModifier.innerHTML = "Modifier";
+    btnModifier.onclick = function() { ouvrirModalModification(this.parentNode.parentNode); };
+    cell6.appendChild(btnModifier);
+
+var btnSupprimer = document.createElement("button");
+btnSupprimer.innerHTML = "Supprimer";
+btnSupprimer.onclick = function() { supprimerLigne(this); };
+cell6.appendChild(btnSupprimer);
+
+}
+
+
+
+// Fonction pour ouvrir la fenêtre modale de modification
+function ouvrirModalModification(ligne) {
+    document.getElementById("numeroMissionMod").value = ligne.cells[0].innerHTML;
+    document.getElementById("cdmMod").value = ligne.cells[1].innerHTML;
+    document.getElementById("entrepriseMod").value = ligne.cells[2].innerHTML;
+    document.getElementById("lieuMod").value = ligne.cells[3].innerHTML;
+    document.getElementById("dateMod").value = ligne.cells[4].innerHTML;
+
+    document.getElementById('modalModification').style.display = 'block';
+    document.getElementById('modalModification').setAttribute('data-row-index', ligne.rowIndex);
+}
+
+
+
+        function supprimerLigne(btn) {
+            var ligne = btn.parentNode.parentNode;
+            ligne.parentNode.removeChild(ligne);
+            mettreAJourLocalStorage();
+        }
+
+        function sauvegarderMission(mission) {
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    mission.etudiants = []; // Ajouter un tableau vide d'étudiants pour chaque nouvelle mission
+    missions.push(mission);
+    localStorage.setItem("missions", JSON.stringify(missions));
+}
+
+
+
+        function chargerMissions() {
+            var missions = JSON.parse(localStorage.getItem("missions")) || [];
+            missions.forEach(mission => ajouterMissionAuTableau(mission));
+        }
+
+        function modifierMission() {
+    // Récupérer l'index de la ligne à modifier
+    var rowIndex = document.getElementById('modalModification').getAttribute('data-row-index');
+    var tableau = document.getElementById("monTableau");
+    var ligne = tableau.rows[rowIndex];
+
+    // Récupérer les valeurs modifiées à partir des champs de la fenêtre modale
+    var missionModifiee = {
+        numero: document.getElementById("numeroMissionMod").value,
+        cdm: document.getElementById("cdmMod").value,
+        entreprise: document.getElementById("entrepriseMod").value, // Ajout de l'entreprise
+        lieu: document.getElementById("lieuMod").value,
+        date: document.getElementById("dateMod").value
+    };
+
+    // Mettre à jour les cellules de la ligne avec les nouvelles valeurs
+    ligne.cells[0].innerHTML = missionModifiee.numero;
+    ligne.cells[1].innerHTML = missionModifiee.cdm;
+    ligne.cells[2].innerHTML = missionModifiee.entreprise; // Mise à jour de l'entreprise
+    ligne.cells[3].innerHTML = missionModifiee.lieu;
+    ligne.cells[4].innerHTML = missionModifiee.date;
+
+    // Fermer la fenêtre modale de modification
+    document.getElementById('modalModification').style.display = 'none';
+
+    // Mettre à jour le localStorage avec les nouvelles données
+    mettreAJourLocalStorage();
+}
+
+
+function ouvrirModalModificationDirect() {
+    var rowIndex = document.getElementById('modalDetails').getAttribute('data-row-index');
+    document.getElementById('modalDetails').style.display = 'none';
+    ouvrirModalModification(document.getElementById("monTableau").rows[rowIndex].cells[4].childNodes[1]); // Modifier le bouton
+}
+
+function supprimerLigneDirect() {
+    var rowIndex = document.getElementById('modalDetails').getAttribute('data-row-index');
+    document.getElementById('modalDetails').style.display = 'none';
+    supprimerLigne(document.getElementById("monTableau").rows[rowIndex].cells[4].childNodes[0]); // Supprimer le bouton
+}
+
+function ajouterEtudiant(numeroMission) {
+    var tableau = document.getElementById("tableauEtudiants");
+    var nouvelleLigne = tableau.insertRow(-1);
+
+    var cell1 = nouvelleLigne.insertCell(0); // Prénom
+    var cell2 = nouvelleLigne.insertCell(1); // Nom
+    var cell3 = nouvelleLigne.insertCell(2); // Heures travaillées
+
+    cell1.innerHTML = '<input type="text" class="input-etudiant prenom" placeholder="Prénom">';
+    cell2.innerHTML = '<input type="text" class="input-etudiant nom" placeholder="Nom">';
+    cell3.innerHTML = '<input type="number" class="input-etudiant heures" placeholder="Heures">';
+
+    // Ajouter un gestionnaire d'événement pour la touche Entrée
+    var inputs = nouvelleLigne.querySelectorAll(".input-etudiant");
+    inputs.forEach(input => input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            insererEtudiant(numeroMission);
+            e.preventDefault();
+        }
+    }));
+}
+function insererEtudiant(numeroMission) {
+    var tableau = document.getElementById("tableauEtudiants").getElementsByTagName('tbody')[0];
+    var derniereLigne = tableau.rows[tableau.rows.length - 1];
+    var inputs = derniereLigne.querySelectorAll(".input-etudiant");
+
+    var prenom = inputs[0].value.trim();
+    var nom = inputs[1].value.trim();
+    var heures = inputs[2].value.trim();
+
+    if (!prenom || !nom || !heures) {
+        alert("Veuillez remplir tous les champs pour ajouter un étudiant.");
+        return;
+    }
+
+    // Supprimer la ligne de saisie
+    tableau.deleteRow(derniereLigne.rowIndex);
+
+    // Sauvegarder les données de l'étudiant
+    sauvegarderEtudiant(numeroMission, prenom, nom, heures);
+
+    // Recharger les étudiants pour mettre à jour l'affichage
+    chargerEtudiants(numeroMission);
+}
+
+function sauvegarderEtudiant(numeroMission, prenom, nom, heures) {
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    var index = missions.findIndex(m => m.numero === numeroMission);
+
+    if (index !== -1) {
+        if (!missions[index].etudiants) {
+            missions[index].etudiants = [];
+        }
+        missions[index].etudiants.push({ prenom: prenom, nom: nom, heures: heures });
+        localStorage.setItem("missions", JSON.stringify(missions));
+    } else {
+        console.error("Mission non trouvée pour le numéro de mission: " + numeroMission);
+    }
+}
+
+function chargerEtudiants(numeroMission) {
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    var mission = missions.find(m => m.numero === numeroMission);
+    var tableauEtudiants = document.getElementById("tableauEtudiants").getElementsByTagName('tbody')[0];
+
+    // Effacer les lignes existantes dans <tbody>
+    tableauEtudiants.innerHTML = '';
+
+    var totalHeures = 0; // Initialiser le total des heures à 0
+
+    // Afficher les étudiants existants pour la mission
+    if (mission && mission.etudiants) {
+        mission.etudiants.forEach(etudiant => {
+            var ligne = tableauEtudiants.insertRow(); // Insère une nouvelle ligne à la fin de <tbody>
+            ligne.insertCell(0).innerText = etudiant.prenom;
+            ligne.insertCell(1).innerText = etudiant.nom;
+            ligne.insertCell(2).innerText = etudiant.heures;
+            totalHeures += parseInt(etudiant.heures, 10) || 0; // Ajouter les heures à totalHeures
+
+            // Ajouter un bouton de suppression
+            var cellActions = ligne.insertCell(3);
+            var btnSupprimer = document.createElement("button");
+            btnSupprimer.textContent = "Supprimer";
+            btnSupprimer.onclick = function() {
+                supprimerEtudiant(numeroMission, etudiant);
+                chargerEtudiants(numeroMission); // Recalculer et afficher le total après suppression
+            };
+            cellActions.appendChild(btnSupprimer);
+        });
+    }
+
+    // Mettre à jour le total des heures affiché
+    var totalHeuresElement = document.getElementById("totalHeures");
+    if (!totalHeuresElement) {
+        totalHeuresElement = document.createElement("p");
+        totalHeuresElement.id = "totalHeures";
+        document.getElementById('modalDetails').appendChild(totalHeuresElement);
+    }
+    totalHeuresElement.innerText = "Total des heures travaillées : " + totalHeures;
+
+    // Ajouter une ligne vide à la fin pour la nouvelle saisie d'étudiants
+    ajouterEtudiant(numeroMission);
+}
+
+
+
+function supprimerEtudiant(numeroMission, etudiantIndex) {
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    var mission = missions.find(m => m.numero === numeroMission);
+
+    if (mission) {
+        mission.etudiants.splice(etudiantIndex, 1); // Supprime l'étudiant de la liste
+        localStorage.setItem("missions", JSON.stringify(missions));
+        chargerEtudiants(numeroMission); // Recharger la liste d'étudiants mise à jour
+    } else {
+        console.error("Mission non trouvée pour le numéro de mission: " + numeroMission);
+    }
+}
+function calculerTotalHeures(numeroMission) {
+    var missions = JSON.parse(localStorage.getItem("missions")) || [];
+    var mission = missions.find(m => m.numero === numeroMission);
+
+    if (mission && mission.etudiants) {
+        return mission.etudiants.reduce((total, etudiant) => {
+            return total + (parseInt(etudiant.heures, 10) || 0);
+        }, 0);
+    }
+
+    return 0;
+}
+function calculerCoutTotal() {
+    var totalHeures = calculerTotalHeures(document.getElementById('modalDetails').getAttribute('data-numero-mission'));
+    var coutHoraireHT = parseFloat(document.getElementById('coutHoraireHT').value) || 0;
+    var fraisTTC = parseFloat(document.getElementById('fraisTTC').value) || 0;
+
+    var coutTotalHT = totalHeures * coutHoraireHT;
+    var coutTotalTTC = (coutTotalHT * 1.2) + fraisTTC ; // Inclut les frais TTC dans le calcul
+
+    // Afficher le coût total HT et TTC
+    document.getElementById('coutTotal').innerText = "Coût total HT : " + coutTotalHT.toFixed(2) + " €";
+    document.getElementById('coutTotalTTC').innerText = "Coût total TTC (incluant les frais) : " + coutTotalTTC.toFixed(2) + " €";
+}
+
+
+
+
+        function mettreAJourLocalStorage() {
+            var tableau = document.getElementById("monTableau");
+            var missions = [];
+            for (var i = 1; i < tableau.rows.length; i++) {
+                var row = tableau.rows[i];
+                var mission = {
+                    numero: row.cells[0].innerHTML,
+                    cdm: row.cells[1].innerHTML,
+                    lieu: row.cells[2].innerHTML,
+                    date: row.cells[3].innerHTML
+                };
+                missions.push(mission);
+            }
+            localStorage.setItem("missions", JSON.stringify(missions));
+        }
+
+        window.onload = chargerMissions;
+
+    </script>
+
+</body>
+</html>
